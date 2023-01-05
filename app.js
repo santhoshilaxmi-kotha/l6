@@ -10,19 +10,27 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async (request, response) => {
-  const allTodos = await Todo.getTodos();
+  const allTodo = await Todo.getTodos();
+  const dueToday = await Todo.dueToday();
+  const overdue = await Todo.overdue();
+  const dueLater = await Todo.dueLater();
+
   if (request.accepts("html")) {
-    response.render("index", { 
-      allTodos 
+    response.render("index", {
+      overdue,
+      allTodo,
+      dueToday,
+      dueLater,
     });
   } else {
-    response.json({ allTodos });
+    response.json({ allTodo, dueToday, dueLater, overdue });
   }
 });
 
 app.get("/", function (request, response) {
   response.send("Hello World");
 });
+
 
 app.get("/todos", async function (_request, response) {
   console.log("Processing list of all Todos ...");

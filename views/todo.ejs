@@ -1,7 +1,23 @@
-<table>
-    <% for(let i=0;i < allTodos.length;i++) {%>
-        <tr>
-            <td> <%= allTodos[i].title%></td>
-        </tr>
-    <%}%>
-</table>
+<div>
+    <h5>Overdue </h5><span class="bg-gray-200 rounded" id="count-overdue"><%= overdue.length %>
+    </span>
+    <ul class="list-none">
+      <%- include('overdue.ejs') %>
+    </ul>
+  
+    <h5>
+      Due Today 
+    </h5><span class="bg-gray-200 rounded" id="count-due-today"><%= dueToday.length %>
+    </span>
+    <ul class="list-none">
+      <%- include('dueToday.ejs') %>
+    </ul>
+  
+    <h5>
+      Due Later 
+    </h5><span class="bg-gray-200 rounded" id="count-due-later"><%= dueLater.length %>
+    </span>
+    <ul class="list-none">
+      <%- include('dueLater.ejs') %>
+    </ul>
+</div>
