@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 "use strict";
 const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
@@ -12,39 +14,69 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static getTodos() {
-      return this.findAll(); //from sequelize package  donot confuse bro
+      return this.findAll();
     }
 
-    
+    static async completedItems() {
+      return await Todo.findAll({
+        where: {
+          
+          completed: true,
+        },
 
+        order: [["id", "ASC"]],
+      });
+    }
     static async dueToday() {
       return this.findAll({
-        where: { dueDate: new Date() },
+        where: { dueDate: new Date(),completed:false },
         order: [["id", "ASC"]],
       });
     }
 
     static async dueLater() {
       return this.findAll({
-        where: { dueDate: { [Op.gt]: new Date() } }, //greater than the duedate
+        where: { dueDate: { [Op.gt]: new Date()},completed:false   }, //greater than the duedate
         order: [["id", "ASC"]],
       });
     }
     static async overdue() {
       return this.findAll({
-        where: { dueDate: { [Op.lt]: new Date() } }, //greater than the duedate
+        where: { dueDate: { [Op.lt]: new Date()},completed:false   }, //greater than the duedate
         order: [["id", "ASC"]],
       });
     }
 
+    static async remove(id) {
+      return this.destroy({
+        where: {
+          id,
+        },
+      });
+    }
 
     static addTodo({ title, dueDate }) {
       //refactoring for business logic and we can add a todo at any endpoint
       return this.create({ title: title, dueDate: dueDate, completed: false });
     }
+    static async completedItems() {
+      return await Todo.findAll({
+        where: {
+          completed: true,
+        },
+
+        order: [["id", "ASC"]],
+      });
+    }
 
     markAsCompleted() {
       return this.update({ completed: true });
+    }
+    setCompletionStatus(completed) {
+      return this.update({
+        completed: completed, 
+        
+      });
     }
   }
   Todo.init(
